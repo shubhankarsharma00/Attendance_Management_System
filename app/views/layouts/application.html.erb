@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Attendance Manager</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <!--Navigation Bar-->
+    <nav class="navbar navbar-light bg-light d-flex">
+      <div class="container">
+        <div class="logo">
+          <a class="navbar-brand" href="/">
+            <%= fa_stacked_icon "map", base: "circle_thin"%>
+            Attendance Manager
+          </a>
+        </div>
+        <div class="user-section">
+          <% if teacher_signed_in? %>
+            <a href="<%= teacher_path(current_teacher)%>" data-method="get">
+              <i class="fa fa-user"></i>
+            </a>
+            <a href="<%= destroy_teacher_session_path%>" data-method="delete">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+          <% elsif student_signed_in? %>
+            <a href="<%= student_path(current_student)%>" data-method="get">
+              <i class="fa fa-user"></i>
+            </a>
+            <a href="<%= destroy_student_session_path%>" data-method="delete">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+          <% else %>
+            <a href="<%= new_student_session_path%>">
+              <i class="fa fa-sign-in"></i>  Student
+            </a>
+            <a href="<%= new_teacher_session_path%>">
+              <i class="fa fa-sign-in"></i>  Teacher
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <!--Main content-->
+    <main class="container" style="min-height: 786px">
+      <%= yield %>
+    </main>
+
+    <!--Footer-->
+    <footer class="container footer">
+      <nav class="navbar d-flex">
+        <ul>
+          <li>ABOUT US</li>
+        </ul>
+        <p> © 2018 Attendance Manager </p>
+      </nav>
+    </footer>
+  </body>
+</html>

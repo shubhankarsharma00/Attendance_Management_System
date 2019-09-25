@@ -1,0 +1,10 @@
+<!-- <h2 class="my-4" style="font-family: Courier New;">Select Subject : </h2> -->
+<%= form_for @course do |f| %>
+<br>
+<%= f.label :subject,"select subject"%>
+<%= f.collection_select :subject_id, Subject.all, :id, :subject_name%>
+<br>
+<%= f.submit%>
+<%end%>
+<br>
+<a href ="<%= new_subject_url()%>" class="btn btn-secondary"> Add a custom subject </a>

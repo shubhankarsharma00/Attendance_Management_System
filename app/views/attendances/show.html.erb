@@ -1,0 +1,13 @@
+<% if teacher_signed_in?%>
+<%= form_tag(edit_attendance_url, method: "get")%>
+<% @lectures.each do |lecture| %>
+<% @student = Student.find(lecturstudent_id)%>
+<% student_id = student.id %>
+<%= radio_button_tag(student_id, "Present") %>
+<%= label_tag(:Present) %>
+<%= radio_button_tag(student_id, "Absent") %>
+<%= label_tag(:Absent) %>
+<%= hidden_field_tag(:id,value = @assignment.id) %>
+<% params.merge(:id => @assignment.id) %>
+<% end %>
+<% end %>

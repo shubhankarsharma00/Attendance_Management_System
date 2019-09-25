@@ -1,0 +1,85 @@
+<% if teacher_signed_in? %>
+<section class="jumbotron text-center">
+	<div class="container">
+		<h1 class="jumbotron-heading">Attendance Manager</h1>
+		<p class="lead text-muted">The site will help us take attendance the better way  </p>
+		<p>
+			<a href="<%= teacher_path(current_teacher.id) %>" class="btn btn-primary my-2"> My Courses </a>
+			<a href="<%= new_course_url()%>" class="btn btn-secondary my-2">New Course</a>
+		</p>
+	</div>
+</section>
+<div class="album py-5 px-5 bg-light">
+	<div class="container">
+		<div class="row">
+			<%@courses = Course.where(teacher_id: current_teacher.id)%>
+			<% @courses.each do |course|%>
+			<% @subject = Subject.find(course.subject_id)%>
+			<div class="col-sm-4">
+				<div class="card mb-4 shadow-sm">
+					<div class="card-body">
+						<p class="card-text"><%= @subject.subject_name %></p>
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="btn-group">
+								<button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href = '<%=course_path(course.id)%>'">Take Attendance</button>
+							</div>
+							<small class="text-muted"><%= course.classes%>classes</small>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+<% elsif student_signed_in? %>
+<section class="jumbotron text-center">
+	<div class="container">
+		<h1 class="jumbotron-heading">Attendance Manager</h1>
+		<p class="lead text-muted">The site will help us take attendance the better way  </p>
+		<p>
+			<a href="<%= student_path(current_student.id)%>" class="btn btn-primary my-2"> Check Attendance </a>
+			<a href="#" class="btn btn-secondary my-2">	<%= current_student.email %></a>
+		</p>
+	</div>
+</section>
+<div class="album py-5 px-5 bg-light">
+	<div class="container">
+		<div class="row">
+			<% @learnings = Learning.where(student_id: current_student.id)%>
+			<% if not @learnings.nil? %>
+			<% @learnings.each do |learning| %>
+			<% @course = Course.find(learning.course_id)%>
+			<% @subject = Subject.find(@course.subject_id)%>			
+			<div class="col-sm-4">
+				<div class="card mb-4 shadow-sm">
+					<div class="card-body">
+						<p class="card-text"><%= @subject.subject_name %></p>
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="btn-group">
+								<% @attendance = Attendance.where(student_id: current_student.id, course_id: @course.id ).first%>
+							</div>
+							<small class="text-muted"><%=@attendance.attended %> attended out of <%=@course.classes%></small>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% end %>
+			<%end%>
+		</div>
+	</div>
+</div>
+<%else%>	
+<div class="container bg-light">
+	<section class="jumbotron text-center">
+		<div class="container">
+		<h1 class="jumbotron-heading">Attendance Manager</h1>
+		<p class="lead text-muted">The site will help us take attendance the better way  </p>
+			<p>
+				<a href="<%= new_student_session_path%>" class="btn btn-primary my-2"> Student </a>
+				<a href="<%= new_teacher_session_path%>" class="btn btn-primary my-2">Teacher</a>
+			</p>
+		</div>
+	</section>
+</div>
+<%end%>

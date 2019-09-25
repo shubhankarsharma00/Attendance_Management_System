@@ -1,0 +1,32 @@
+<% if teacher_signed_in?%>
+<%= form_tag(edit_attendance_url, method: "get")%>
+<% @learnings.each do |lecture| %>
+<% @student = Student.find(lecture.student_id)%>
+<%= @student.first_name %>
+<% student_id = @student.id %>
+<%= radio_button_tag(student_id, "Present") %>
+<%= label_tag(:Present) %>
+<%= radio_button_tag(student_id, "Absent") %>
+<%= label_tag(:Absent) %>
+<%= hidden_field_tag(:id,value = @course.id) %>
+<% params.merge(:id => @course.id) %>
+<br>
+<%end%>
+<% if not @learnings.nil?%>
+<input class= "btn btn-primary my-2"name="commit" type="submit" value="Submit" data-disable-with="Submit" />
+<% end %>
+<% end %>
+
+<h2 class="my-4" style="font-family: Courier New;">Add Students : </h2>
+<ul class="list-group my-5">
+	<% Student.all.each do |student| %>
+	<% @learning = Learning.where(student_id: student.id, course_id: @course.id).first%>
+	<% if @learning.nil? %>
+	<li class="list-group-item">
+		<%= student.first_name %>
+		<a href ="<%= new_learning_url(course_id: @course.id,student_id: student.id)%>" class="mx-4"> <i class="fa fa-plus" aria-hidden="true"></i>
+		</a> 
+	</li>
+	<% end %>
+	<% end %>
+</ul>

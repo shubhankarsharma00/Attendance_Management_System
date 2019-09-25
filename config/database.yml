@@ -1,0 +1,12 @@
+default: &default
+ adapter: postgresql
+ timeout: 5000
+development:
+ <<: *default
+ database: attms
+test:
+ <<: *default
+ database: test_attms
+production:
+ <<: *default
+ database: production_attms
