@@ -1,21 +1,43 @@
 <% if teacher_signed_in?%>
-<%= form_tag(edit_attendance_url, method: "get")%>
-<% @learnings.each do |lecture| %>
-<% @student = Student.find(lecture.student_id)%>
-<%= @student.first_name %>
-<% student_id = @student.id %>
-<%= radio_button_tag(student_id, "Present") %>
-<%= label_tag(:Present) %>
-<%= radio_button_tag(student_id, "Absent") %>
-<%= label_tag(:Absent) %>
-<%= hidden_field_tag(:id,value = @course.id) %>
-<% params.merge(:id => @course.id) %>
+<% if not @learnings.nil?%>
+<b>Students Enrolled:</b>
 <br>
 <%end%>
-<% if not @learnings.nil?%>
-<input class= "btn btn-primary my-2"name="commit" type="submit" value="Submit" data-disable-with="Submit" />
+<% @learnings.each do |lecture| %>
+	<% @student = Student.find(lecture.student_id)%>
+	<%= @student.first_name %>
+	<br>
+<%end%>	
+<%= form_tag(edit_attendance_url, id: "a" ,method: "get")%>
+	<%#= hidden_field_tag(student_id,value = "Present") %>
+	<%= hidden_field_tag(:id,value = @course.id) %>
+	<% params.merge(:id => @course.id) %>
+	<% if not @learnings.nil?%>
+		<input id="attendance" disabled = "true" class= "btn btn-primary my-2"name="commit" type="submit" value="Submit" data-disable-with="Submit" />
+	<% end %>
 <% end %>
-<% end %>
+<script type="text/javascript">
+function checkStatus(){
+	document.querySelector("#attendance").disabled = false
+	fetch('https://sidhy-33818.firebaseio.com/.json')
+	  .then(response => {
+	    return response.json()
+	  })
+	  .then(data => {
+	    // Work with JSON data here
+	    for (d in data){
+			console.log(data[d])
+	    	f = document.querySelector("#a")
+	    	f.innerHTML+=(`<input type="hidden" name=${data[d]} value="Present"></input>`)
+	    }
+	  })
+	  .catch(err => {
+	    // Do something for an error here
+	  })
+	  
+}
+setTimeout(checkStatus,10)
+</script>
 
 <h2 class="my-4" style="font-family: Courier New;">Add Students : </h2>
 <ul class="list-group my-5">
@@ -28,5 +50,8 @@
 		</a> 
 	</li>
 	<% end %>
-	<% end %>
 </ul>
+<% end %>
+<%# Thread.new do %>
+	<%#system("cd pys && python faceReco.py")%>
+<%#end%>

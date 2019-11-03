@@ -22,7 +22,8 @@ class AttendancesController < ApplicationController
       if params[attendance.student_id.to_s] == 'Present'
         attendance.increment!(:attended)
       end
-    end  
+    end
+    redirect_to home_index_url  
   end
 
 
